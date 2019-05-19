@@ -3,14 +3,6 @@ import sys
 
 
 # query_string = '''
-#   SELECT e.Phone, c.*
-#   FROM Employee as e
-#   INNER JOIN Customer as c ON e.EmployeeId  =  c.SupportRepId
-#   LEFT JOIN Invoice as i on i.CustomerId = c.CustomerId
-# '''
-
-
-# query_string = '''
 #     UPDATE Employee
 #     SET FirstName = 'Ясон'
 #     WHERE EmployeeId = 4
@@ -28,10 +20,31 @@ import sys
 #     DELETE FROM Employee WHERE EmployeeId = 23;
 #     DELETE FROM Employee WHERE EmployeeId = 22
 # '''
+second_query_string = '''
+    SELECT a.FirstName, a.LastName, a.Phone, b.FirstName, b.LastName, b.Phone
+    FROM Employee as a
+    LEFT JOIN Employee as b 
+    ON a.EmployeeId  =  b.ReportsTo
+'''
 
-query_string = '''
-    DELETE FROM Employee WHERE EmployeeId = 23;
-    DELETE FROM Employee WHERE EmployeeId = 22
+
+second_query_string = '''
+    SELECT a.FirstName, a.LastName, a.Phone, b.FirstName, b.LastName, b.Phone
+    FROM Employee as a
+    LEFT JOIN Employee as b 
+    ON a.EmployeeId  =  b.ReportsTo
+'''
+
+
+third_query_string = '''
+    SELECT a.FirstName, a.Phone, d.UnitPrice, d.TrackId
+    FROM Customer as a
+    LEFT JOIN Invoice as b 
+    ON a.CustomerId  =  b.InvoiceId
+    LEFT JOIN InvoiceLine as c
+    ON b.InvoiceId  =  c.InvoiceId
+    LEFT JOIN Track as d
+    ON c.TrackId  =  d.TrackId
 '''
 
 
@@ -39,7 +52,7 @@ con = None
 try:
     con = lite.connect('Chinook_Sqlite.sqlite')
     cur = con.cursor()    
-    cur.execute(query_string)
+    cur.execute(second_query_string)
     # con.commit()
     con.rollback()
     data = cur.fetchall()
